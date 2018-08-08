@@ -42,11 +42,11 @@ You can override multiple volumes at the same time by using -v multiple times
 
 *Note*: if you want override the pancloud and apiexplorer folders with empty directories on the host, you can run the prep-hostdirs.sh script that will copy the existing versions to the empty host dir that you can later modify (see example later). If you want to override the notebooks, run the prep-host-notebooks.sh script.
 
-Finally, you can update pancloud, apiexplorer and the notebooks, by running the following scripts:
+Finally, if you use hosted volumes, you can update pancloud, apiexplorer and the notebooks, by running the following scripts:
 ```
-host~$: docker run --it fvigo/appframework-dev:latest update-pancloud.sh
-host~$: docker run --it fvigo/appframework-dev:latest update-apiexplorer.sh
-host~$: docker run --it fvigo/appframework-dev:latest update-notebooks.sh
+host~$: docker run -it -v $HOME/pancloud/pancloud:/opt/conda/lib/python3.6/site-packages/pancloud fvigo/appframework-dev:latest update-pancloud.sh
+host~$: docker run -it -v $HOME/apiexplorer:/opt/apiexplorer fvigo/appframework-dev:latest update-apiexplorer.sh
+host~$: docker run -it -v $HOME/notebooks:/home/jovyan/work fvigo/appframework-dev:latest update-notebooks.sh
 ```
 
 pancloud is downloaded from PyPy, apiexplorer and the notebooks from the Github repos.
@@ -57,11 +57,11 @@ pancloud is downloaded from PyPy, apiexplorer and the notebooks from the Github 
 
 ### Override the credentials path with the default of your host (~/config/pancloud/credentials.json)
 ```
-host~$ docker run -p 8888:8888 -p 5000:5000 -v $HOME/.config/pancloud:/opt/pancloud --it fvigo/appframework-dev:latest
+host~$ docker run -p 8888:8888 -p 5000:5000 -v $HOME/.config/pancloud:/opt/pancloud -it fvigo/appframework-dev:latest
 ```
 ### Override the API Explorer DB path with a local folder on your host (~/apiexplorerdb)
 ```
-host~$ docker run -p 8888:8888 -p 5000:5000 -v $HOME/apiexplorerdb:/opt/apiexplorerdb --it fvigo/appframework-dev:latest
+host~$ docker run -p 8888:8888 -p 5000:5000 -v $HOME/apiexplorerdb:/opt/apiexplorerdb -it fvigo/appframework-dev:latest
 ```
 ### Override the apiexplorer with the latest version you download from Github
 ```
@@ -112,18 +112,18 @@ docker run -p 5000:5000 -e APIEXPLORER_DEBUG=yes -it fvigo/appframework-dev:late
 ```
 ### Update the notebooks from Github
 ```
-host~$: docker run --it fvigo/appframework-dev:latest update-notebooks.sh
+host~$: docker run -it -v $HOME/notebooks:/home/jovyan/work fvigo/appframework-dev:latest update-notebooks.sh
 ```
 ### Update pancloud from PyPy
 ```
-host~$: docker run --it fvigo/appframework-dev:latest update-pancloud.sh
+host~$: docker run -it -v $HOME/pancloud/pancloud:/opt/conda/lib/python3.6/site-packages/pancloud fvigo/appframework-dev:latest update-pancloud.sh
 ```
 ### Update apiexplorer from GitHub
 ```
-host~$: docker run --it fvigo/appframework-dev:latest update-apiexplorer.sh
+host~$: docker run -v $HOME/apiexplorer:/opt/apiexplorer -it fvigo/appframework-dev:latest update-apiexplorer.sh
 ```
 ### Update all of them (pancloud, apiexplorer and notebooks)
 ```
-host~$: docker run --it fvigo/appframework-dev:latest update-all.sh
+host~$: docker run --it -v $HOME/notebooks:/home/jovyan/work -v $HOME/apiexplorer:/opt/apiexplorer -v $HOME/pancloud/pancloud:/opt/conda/lib/python3.6/site-packages/pancloud fvigo/appframework-dev:latest update-all.sh
 ```
 
